@@ -1,0 +1,30 @@
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "username" : "foo",
+  "password" : "bar"
+}
+
+### No token
+
+GET http://localhost:8080/user/me
+Accept: application/json
+
+### Wrong token
+
+GET http://localhost:8080/user/me
+Accept: application/json
+Authorization: Bearer foo
+
+### Correct token
+
+GET http://localhost:8080/user/me
+Accept: application/json
+Authorization: Bearer foobar
+###
+
+GET http://localhost:8080/user/login
+Accept: application/json
+
+###
