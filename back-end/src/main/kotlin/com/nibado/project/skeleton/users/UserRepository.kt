@@ -1,9 +1,14 @@
 package com.nibado.project.skeleton.users
 
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.stereotype.Repository
 
-interface UserRepository : UserDetailsService {
-    fun loadUserByToken(token: String): UserDetails?
-    fun addUser(username: String, password: String, vararg roles: String) : Pair<UserDetails, String>
+@Repository
+class UserRepository {
+    private val users = mutableMapOf<String, UserDetails>()
+
+    fun findByUsername(name: String): UserDetails? = users[name]
+    fun addUser(userDetails: UserDetails) {
+        users[userDetails.username] = userDetails
+    }
 }

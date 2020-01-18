@@ -6,29 +6,38 @@ import java.security.Principal
 
 @RestController
 @RequestMapping("/user")
-class UserController {
-    @GetMapping("/login")
-    fun login(principal: Principal?) : UserLoggedInResponse {
-        return UserLoggedInResponse(principal != null)
+class UserController(private val userService: UserService) {
+    @PostMapping("/login")
+    fun login(@RequestBody userLoginRequest: UserLoginRequest) : UserTokenResponse {
+        val (userName, password) = userLoginRequest
+        val token = userService.login(userName, password)
+
+        return UserTokenResponse(token)
     }
 
-    @PostMapping("/login")
-    fun login(@RequestBody userLoginRequest: UserLoginRequest) : UserLoginResponse {
-        return UserLoginResponse("abcdef")
+    @PostMapping("/register")
+    fun register(@RequestBody userRegistrationRequest: UserRegistrationRequest) : UserTokenResponse {
+        val (userName, password) = userRegistrationRequest
+        val token = userService.register(userName, password)
+
+        return UserTokenResponse(token)
     }
 
     @DeleteMapping("/login")
-    fun logout(): ResponseEntity<Unit> {
+    fun logout(principal: Principal?): ResponseEntity<Unit> {
+        principal?.run { userService.logout(name) }
+
         return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/me")
     fun me(principal: Principal) : UserResponse {
-        return UserResponse(principal.name)
+        val user = userService.getUser(principal.name)
+        return UserResponse(user.username, user.authorities.map { it.authority }.toSet())
     }
 
-    data class UserLoggedInResponse(val boolean: Boolean)
-    data class UserResponse(val username: String)
+    data class UserResponse(val username: String, val authorities: Set<String>)
     data class UserLoginRequest(val username: String, val password: String)
-    data class UserLoginResponse(val token: String)
+    data class UserRegistrationRequest(val username: String, val password: String)
+    data class UserTokenResponse(val token: String)
 }

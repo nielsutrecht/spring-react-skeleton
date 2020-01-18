@@ -1,9 +1,21 @@
+### Wrong login
+
 POST http://localhost:8080/user/login
 Content-Type: application/json
 
 {
   "username" : "foo",
   "password" : "bar"
+}
+
+### Correct login
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "username" : "jane",
+  "password" : "supersecret"
 }
 
 ### No token
@@ -21,10 +33,31 @@ Authorization: Bearer foo
 
 GET http://localhost:8080/user/me
 Accept: application/json
-Authorization: Bearer foobar
+Authorization: Bearer tuzJ/mYuyrJ/A+LX6kEdKQ==
 ###
 
-GET http://localhost:8080/user/login
+DELETE http://localhost:8080/user/login
 Accept: application/json
+Authorization: Bearer RnPjfF83Jbd2zelQ7DbJ5A==
+
+### Register existing
+
+POST http://localhost:8080/user/register
+Content-Type: application/json
+
+{
+  "username" : "jane",
+  "password" : "supersecret"
+}
+
+### Register correct
+
+POST http://localhost:8080/user/register
+Content-Type: application/json
+
+{
+  "username" : "test@example.com",
+  "password" : "mypassword"
+}
 
 ###

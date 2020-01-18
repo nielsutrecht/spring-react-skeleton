@@ -80,7 +80,8 @@ class SecurityConfig(private val provider: TokenAuthenticationProvider) : WebSec
 
     companion object {
         private val PUBLIC_URLS: RequestMatcher = OrRequestMatcher(
-            AntPathRequestMatcher("/user/login")
+            AntPathRequestMatcher("/user/login", "POST"),
+            AntPathRequestMatcher("/user/register", "POST")
         )
         private val PROTECTED_URLS: RequestMatcher = NegatedRequestMatcher(PUBLIC_URLS)
     }
